@@ -19,37 +19,29 @@ class Run(object):
 		"""Given Run object with positions and times, return correpsonding 
 			velocity"""
 		#Most of the algorithm is completely stolen from the Lab Manual.
-		velocity = [None]*self.size
-		run = self
-		for i in range(run.size+1):
+		for i in range(self.size):
 			if i == 0:
-				velocity[i] = (run.position[i+1] - run.position[i])/ \
-				(run.time[i+1] - run.time[i])
-			elif i == (run.size+1):
-				velocity[i] = (run.position[i] - run.position[i-1])/ \
-				(run.time[i] - run.time[i-1])
+				self.velocity[i] = (self.position[i+1] - self.position[i])/ \
+				(self.time[i+1] - self.time[i])
+			elif i == (self.size-1):
+				self.velocity[i] = (self.position[i] - self.position[i-1])/ \
+				(self.time[i] - self.time[i-1])
 			else:
-				velocity[i] = (run.position[i+1] - run.position[i-1])/ \
-				(run.time[i+1] - run.time[i-1])
-			print "i = " + str(i)
-			print "Velocity = " + str(velocity[i])
-			
+				self.velocity[i] = (self.position[i+1] - self.position[i-1])/ \
+				(self.time[i+1] - self.time[i-1])
+
+			print "Calculated velocities."
 
 	def findAcceleration(self):
 		"""Calculate the acceleration and y intercept from the time 
 		and velocity variables, add return the linfit"""
-		run = self
-		time = run.time
-		time.pop()
-		run.fit = np.polyfit(time, run.velocity, 1)
+		self.fit = np.polyfit(self.time, self.velocity, 1)
 			
 
 	def plotAcceleration(self):
 		"""Plots velocity vs time"""
-		run = self
-		fit_fun = np.poly1d(run.fit)
-		time = run.time
-		mpl.plot(time,run.velocity,'bs')
+		fit_fun = np.poly1d(self.fit)
+		mpl.plot(self.time,self.velocity,'bs')
 		mpl.show()
 
 
