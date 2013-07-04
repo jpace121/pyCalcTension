@@ -13,7 +13,7 @@ class Run(object):
 		self.time = [None]*self.size
 		self.position = [None]*self.size
 		self.velocity = [None]*self.size
-		self.linspace = [None]*2
+		self.fit= [None]*2
 
 	def findVelocity(self):
 		"""Given Run object with positions and times, return correpsonding 
@@ -34,7 +34,6 @@ class Run(object):
 			print "i = " + str(i)
 			print "Velocity = " + str(velocity[i])
 			
-		return velocity
 
 	def findAcceleration(self):
 		"""Calculate the acceleration and y intercept from the time 
@@ -42,15 +41,13 @@ class Run(object):
 		run = self
 		time = run.time
 		time.pop()
-		print time
-		fit = np.polyfit(time, run.velocity, 1)
+		run.fit = np.polyfit(time, run.velocity, 1)
 			
-		return fit
 
 	def plotAcceleration(self):
 		"""Plots velocity vs time"""
 		run = self
-		fit_fun = np.poly1d(run.linspace)
+		fit_fun = np.poly1d(run.fit)
 		time = run.time
 		mpl.plot(time,run.velocity,'bs')
 		mpl.show()
@@ -80,10 +77,9 @@ def main():
 	excelFile = "ExcelTest.xls"
 	sheetName = u"Sheet1"
 	Run1 = exportData(excelFile,sheetName)
-	Run1.velocity = findVelocity(Run1)
-	print "Time: "
-	Run1.linspace = findAcceleration(Run1)
-	plotAcceleration(Run1)
+	Run1.findVelocity()
+	Run1.findAcceleration()
+	Run1.plotAcceleration()
 	print "Acceleration = %d" % Run1.linspace[0]
 
 
