@@ -14,6 +14,7 @@ class Run(object):
 		self.position = [None]*self.size
 		self.velocity = [None]*self.size
 		self.fit= [None]*2
+		self.fitDirect = []
 
 	def findVelocity(self):
 		"""Given Run object with positions and times, return correpsonding 
@@ -30,19 +31,21 @@ class Run(object):
 				self.velocity[i] = (self.position[i+1] - self.position[i-1])/ \
 				(self.time[i+1] - self.time[i-1])
 
-			print "Calculated velocities."
-
 	def findAcceleration(self):
 		"""Calculate the acceleration and y intercept from the time 
 		and velocity variables, add return the linfit"""
 		self.fit = np.polyfit(self.time, self.velocity, 1)
-			
 
-	def plotAcceleration(self):
+	def plotVelocity(self):
 		"""Plots velocity vs time"""
 		fit_fun = np.poly1d(self.fit)
 		mpl.plot(self.time,self.velocity,'bs')
 		mpl.show()
+
+	def fitAcceleration(self):
+		"""Calculates the acceleration directly from the position and time data
+		and numpy's linfit option"""
+		self.fitDirect = np.polyfit(self.time, self.position, 2)
 
 
 def exportData(fileName, sheetName):
@@ -71,9 +74,11 @@ def main():
 	Run1 = exportData(excelFile,sheetName)
 	Run1.findVelocity()
 	Run1.findAcceleration()
-	Run1.plotAcceleration()
-	print "Acceleration = %d" % Run1.linspace[0]
-
+	Run1.plotVelocity()
+	Run1.fitAcceleration()
+	print "Acceleration = %d" % Run1.fit[0]
+	print "Directly calculated Acceleration = "  
+	print Run1.fitDirect 
 
 
 
