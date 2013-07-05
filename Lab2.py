@@ -73,11 +73,11 @@ def main():
 	sheetName = u"Sheet1"
 	Run1 = exportData(excelFile,sheetName)
 	Run1.findVelocity()
-	Run1.findAcceleration()
-	Run1.plotVelocity()
+	#Run1.findAcceleration()
 	Run1.fitAcceleration()
 	acceleration = Run1.fitDirect[0]*2.
 	print "Acceleration = %d" % acceleration
+	Run1.plotVelocity()
 
 
 
