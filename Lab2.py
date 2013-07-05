@@ -76,9 +76,8 @@ def main():
 	Run1.findAcceleration()
 	Run1.plotVelocity()
 	Run1.fitAcceleration()
-	print "Acceleration = %d" % Run1.fit[0]
-	print "Directly calculated Acceleration = "  
-	print Run1.fitDirect 
+	acceleration = Run1.fitDirect[0]*2.
+	print "Acceleration = %d" % acceleration
 
 
 
