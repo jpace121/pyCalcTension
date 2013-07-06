@@ -15,6 +15,9 @@ class Run(object):
 		self.velocity = [None]*self.size
 		self.fit= []
 		self.fitDirect = []
+		self.goodVelocities = []
+		self.goodTimes = []
+		self.goodPositions = []
 
 	def findVelocity(self):
 		"""Given Run object with positions and times, return correpsonding 
@@ -34,7 +37,14 @@ class Run(object):
 	def findAcceleration(self):
 		"""Calculate the acceleration and y intercept from the time 
 		and velocity variables, add return the linfit"""
-		self.fit = np.polyfit(self.time, self.velocity, 1)
+		for i in range(self.size-1):
+			if (self.velocity[i+1]-self.velocity[i]) >= 0:
+				self.goodVelocities.append(self.velocity[i])
+				self.goodTimes.append(self.time[i])
+			else:
+				break
+				
+		self.fit = np.polyfit(self.goodTimes, self.goodVelocities, 1)
 
 	def plotVelocity(self):
 		"""Plots velocity vs time"""
@@ -45,7 +55,10 @@ class Run(object):
 	def fitAcceleration(self):
 		"""Calculates the acceleration directly from the position and time data
 		and numpy's linfit option"""
-		self.fitDirect = np.polyfit(self.time, self.position, 2)
+		#Use the calcualted goodTimes to find goodPositions
+		for i in range(len(self.goodTimes)):
+			self.goodPositions.append(self.position[i])
+		self.fitDirect = np.polyfit(self.goodTimes, self.goodPositions, 2)
 
 
 def exportData(fileName, sheetName):
@@ -69,14 +82,15 @@ def exportData(fileName, sheetName):
 
 def main():
 	"""Performs data analysis for Moore's Lab 2."""
-	excelFile = "ExcelTest.xls"
-	sheetName = u"Sheet1"
+	excelFile = "ResultsLab2.xlsx"
+	sheetName = u"Run1"
 	Run1 = exportData(excelFile,sheetName)
 	Run1.findVelocity()
-	#Run1.findAcceleration()
+	Run1.findAcceleration()
 	Run1.fitAcceleration()
-	acceleration = Run1.fitDirect[0]*2.
+	acceleration = Run1.fitDirect[0]*2
 	print "Acceleration = %d" % acceleration
+	print Run1.fit
 	Run1.plotVelocity()
 
 
