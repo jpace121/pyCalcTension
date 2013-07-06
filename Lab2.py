@@ -13,7 +13,7 @@ class Run(object):
 		self.time = [None]*self.size
 		self.position = [None]*self.size
 		self.velocity = [None]*self.size
-		self.fit= [None]*2
+		self.fit= []
 		self.fitDirect = []
 
 	def findVelocity(self):
