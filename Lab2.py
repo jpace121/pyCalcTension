@@ -35,8 +35,7 @@ class Run(object):
 				(self.time[i+1] - self.time[i-1])
 
 	def findAcceleration(self):
-		"""Calculate the acceleration and y intercept from the time 
-		and velocity variables, add return the linfit"""
+		"""Try to eliminate 'bad' data points""" 
 		for i in range(self.size-1):
 			if (self.velocity[i+1]-self.velocity[i]) >= 0:
 				self.goodVelocities.append(self.velocity[i])
@@ -82,15 +81,14 @@ def exportData(fileName, sheetName):
 
 def main():
 	"""Performs data analysis for Moore's Lab 2."""
-	excelFile = "ResultsLab2.xlsx"
-	sheetName = u"Run1"
+	excelFile = "Exceltest.xls"
+	sheetName = u"Sheet1"
 	Run1 = exportData(excelFile,sheetName)
 	Run1.findVelocity()
 	Run1.findAcceleration()
 	Run1.fitAcceleration()
 	acceleration = Run1.fitDirect[0]*2
 	print "Acceleration = %d" % acceleration
-	print Run1.fit
 	Run1.plotVelocity()
 
 
