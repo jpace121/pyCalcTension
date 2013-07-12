@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as mpl
 
 class Run(object):
-	"""Stores variables for each run for easy access.
-	   Allows fake namespace/struct like thing."""
+	"""Variables and Methods to analyze data from a spreadsheet with times and
+	   positions"""
 	
 	def __init__(self, numRows):
 		self.size = numRows
@@ -33,18 +33,7 @@ class Run(object):
 			else:
 				self.velocity[i] = (self.position[i+1] - self.position[i-1])/ \
 				(self.time[i+1] - self.time[i-1])
-
-	def findAcceleration(self):
-		"""Try to eliminate 'bad' data points""" 
-		for i in range(self.size-1):
-			if (self.velocity[i+1]-self.velocity[i]) >= 0:
-				self.goodVelocities.append(self.velocity[i])
-				self.goodTimes.append(self.time[i])
-			else:
-				break
-				
-		self.fit = np.polyfit(self.goodTimes, self.goodVelocities, 1)
-
+	
 	def plotVelocity(self):
 		"""Plots velocity vs time"""
 		fit_fun = np.poly1d(self.fit)
@@ -57,7 +46,7 @@ class Run(object):
 		#Use the calcualted goodTimes to find goodPositions
 		for i in range(len(self.goodTimes)):
 			self.goodPositions.append(self.position[i])
-		self.fitDirect = np.polyfit(self.goodTimes, self.goodPositions, 2)
+		self.fitDirect = np.polyfit(self.time, self.position, 2)
 
 
 def exportData(fileName, sheetName):
@@ -85,7 +74,7 @@ def main():
 	sheetName = u"Sheet1"
 	Run1 = exportData(excelFile,sheetName)
 	Run1.findVelocity()
-	Run1.findAcceleration()
+	#Run1.findAcceleration()
 	Run1.fitAcceleration()
 	acceleration = Run1.fitDirect[0]*2
 	print "Acceleration = %d" % acceleration
